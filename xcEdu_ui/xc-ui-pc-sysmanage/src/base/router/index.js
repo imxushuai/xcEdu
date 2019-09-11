@@ -12,7 +12,6 @@ let concat = (router) => {
   routes = routes.concat(router)
 }
 
-
 // 合并路由规则
 concat(HomeRouter)
 concat(CmsRouter)

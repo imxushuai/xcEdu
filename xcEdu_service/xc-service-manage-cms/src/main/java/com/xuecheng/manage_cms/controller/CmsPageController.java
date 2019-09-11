@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("cms")
+@RequestMapping("cms/page")
 public class CmsPageController implements CmsPageControllerApi {
 
     @Autowired
@@ -24,4 +24,6 @@ public class CmsPageController implements CmsPageControllerApi {
                                         QueryPageRequest queryPageRequest) {
         return cmsPageService.findList(page, size, queryPageRequest);
     }
+
+
 }
