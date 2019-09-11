@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public enum CmsCode implements ResultCode {
     CMS_ADDPAGE_EXISTSNAME(false,24001,"页面名称已存在！"),
+    CMS_EDITPAGE_NOTEXISTS(false,24008,"当前操作的页面不存在！"),
     CMS_GENERATEHTML_DATAURLISNULL(false,24002,"从页面信息中找不到获取数据的url！"),
     CMS_GENERATEHTML_DATAISNULL(false,24003,"根据页面的数据url获取不到数据！"),
     CMS_GENERATEHTML_TEMPLATEISNULL(false,24004,"页面模板为空！"),
