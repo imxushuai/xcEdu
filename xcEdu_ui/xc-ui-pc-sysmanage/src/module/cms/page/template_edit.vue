@@ -1,0 +1,117 @@
+  <template>
+    <div style="margin-top:10px; width:40%">
+        <el-form :model="cmsTemplate" :rules="rules" ref="cmsTemplateForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="站点ID" prop="siteId">
+                <!-- 站点ID下拉选择 -->
+                <el-select v-model="cmsTemplate.siteId" placeholder="请选择站点">
+                    <el-option
+                        v-for="item in cmsSiteList"
+                        :key="item.siteId"
+                        :label="item.siteName"
+                        :value="item.siteId">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="模板名称" prop="templateName">
+                <el-input v-model="cmsTemplate.templateName"></el-input>
+            </el-form-item>
+            <el-form-item label="模板参数" prop="templateParameter">
+                <el-input v-model="cmsTemplate.templateParameter"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="goBack">返回</el-button>
+                <el-button type="primary" @click="onSubmit('cmsTemplateForm')">提交</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+  </template>
+
+  <script>
+    import * as cmsApi from '../api/cms'
+    export default {
+      data() {
+        return {
+            cmsSiteList:[],
+            cmsTemplate: {
+                templateName: '', 
+                templateParameter: '',
+                siteId: ''
+            },
+            rules: {
+                siteId: [
+                    { required: true, message: '请选择站点', trigger: 'change' }
+                ],
+                templateName: [
+                    { required: true, message: '请输入模板名称', trigger: 'blur' }
+                ],
+                templateParameter: [
+                    { required: true, message: '请输入模板参数', trigger: 'blur' }
+                ]
+            }
+        }
+      },
+      methods: {
+        // 查询所有站点cmsSite
+        cmsSiteQueryAll:function() {
+            cmsApi.site_list_all().then(res => {
+              this.cmsSiteList = res.queryResult.list
+            })
+        },
+        onSubmit:function(formname) {
+            // 校验表单
+            this.$refs[formname].validate((valid) => {
+                if (valid) {// 校验通过
+                    this.$confirm('确认提交?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'info'
+                    }).then(() => {
+                        cmsApi.editCmsTemplate(this.cmsTemplate).then(res => {
+                            this.$message({
+                                showClose: true,
+                                message: res.message,
+                                type: 'success'
+                            })
+                            // 清空数据
+                            this.cmsTemplate = {}
+                            // 回退页面
+                            this.goBack()
+                        })
+                    })
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: '提交失败，请检查是否正确录入数据！',
+                        type: 'error'
+                    });
+                }
+            });
+            
+        },
+        goBack:function() {
+            if (this.$route.query.page) {
+                // 返回
+                this.$router.push({
+                    path:'/cms/template/list', 
+                    query: {
+                        page:this.$route.query.page
+                    }
+                })
+            } else {
+                this.$router.push({
+                    path:'/cms/template/list'
+                })
+            }
+        },
+        getCmsTemplate:function(templateId) {
+            cmsApi.findCmsTemplateById(templateId).then(res => {
+                this.cmsTemplate = res.cmsTemplate
+            })
+        }
+      },
+      created() {
+        this.getCmsTemplate(this.$route.query.templateId)
+        this.cmsSiteQueryAll()
+      }
+    }
+  </script>

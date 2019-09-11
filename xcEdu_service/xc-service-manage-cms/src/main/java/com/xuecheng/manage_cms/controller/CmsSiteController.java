@@ -2,7 +2,6 @@ package com.xuecheng.manage_cms.controller;
 
 import com.xuecheng.api.cms.CmsSiteControllerApi;
 import com.xuecheng.framework.domain.cms.CmsSite;
-import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsSiteResult;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;

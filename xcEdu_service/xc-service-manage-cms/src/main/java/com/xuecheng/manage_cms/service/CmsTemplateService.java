@@ -1,6 +1,5 @@
 package com.xuecheng.manage_cms.service;
 
-import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.CmsTemplate;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -77,8 +76,8 @@ public class CmsTemplateService {
      */
     public CmsTemplate edit(CmsTemplate cmsTemplate) {
         // 查询
-        if (cmsTemplate != null && StringUtils.isNotBlank(cmsTemplate.getSiteId())) {
-            Optional<CmsTemplate> optionalCmsTemplate = cmsTemplateRepository.findById(cmsTemplate.getSiteId());
+        if (cmsTemplate != null && StringUtils.isNotBlank(cmsTemplate.getTemplateId())) {
+            Optional<CmsTemplate> optionalCmsTemplate = cmsTemplateRepository.findById(cmsTemplate.getTemplateId());
             if (optionalCmsTemplate.isPresent()) {
                 CmsTemplate one = optionalCmsTemplate.get();
                 // 执行更新

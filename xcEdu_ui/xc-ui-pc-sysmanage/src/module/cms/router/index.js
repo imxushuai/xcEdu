@@ -5,6 +5,10 @@ import page_edit from '@/module/cms/page/page_edit.vue'
 import site_list from '@/module/cms/page/site_list.vue'
 import site_add from '@/module/cms/page/site_add.vue'
 import site_edit from '@/module/cms/page/site_edit.vue'
+import template_list from '@/module/cms/page/template_list.vue'
+import template_add from '@/module/cms/page/template_add.vue'
+import template_edit from '@/module/cms/page/template_edit.vue'
+
 export default [{ 
   path: '/cms', 
   component: Home, 
@@ -39,6 +43,21 @@ export default [{
     path:'/cms/site/edit',
     name:'站点修改',
     component: site_edit,
+    hidden:true
+  },{
+    path:'/cms/template/list',
+    name:'模板列表',
+    component: template_list,
+    hidden:false
+  },{
+    path:'/cms/template/add',
+    name:'模板新增',
+    component: template_add,
+    hidden:true
+  },{
+    path:'/cms/template/edit',
+    name:'模板修改',
+    component: template_edit,
     hidden:true
   }]
 }]
