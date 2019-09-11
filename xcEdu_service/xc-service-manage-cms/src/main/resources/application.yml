@@ -5,6 +5,6 @@ spring:
     name: xc‐service‐manage‐cms
   data:
     mongodb:
-      host: 192.168.136.110
+      host: 47.107.128.204
       port: 27017
       database: xc_cms

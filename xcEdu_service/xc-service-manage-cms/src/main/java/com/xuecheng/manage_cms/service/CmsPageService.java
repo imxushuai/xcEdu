@@ -2,8 +2,6 @@ package com.xuecheng.manage_cms.service;
 
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
-import com.xuecheng.framework.domain.cms.response.CmsCode;
-import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
@@ -115,5 +113,9 @@ public class CmsPageService {
     public void deleteById(String pageId) {
         // 查询
         cmsPageRepository.deleteById(pageId);
+    }
+
+    public CmsPage findBySiteIdAndPageNameAndPageWebPath(String siteId, String pageName, String pageWebPath) {
+        return cmsPageRepository.findBySiteIdAndPageNameAndPageWebPath(siteId, pageName, pageWebPath);
     }
 }
