@@ -3,7 +3,7 @@
         <el-button type="primary" icon="el-icon-search" @click="query" style="margin-top: 20px">查询</el-button>
         <!-- 新增站点按钮 -->
         <router-link class="mui-tab-item" :to="{path:'/cms/template/add/'}">
-          <el-button type="primary" icon="el-icon-search" style="margin-top: 20px">新增模板</el-button>
+          <el-button type="primary" icon="el-icon-plus" style="margin-top: 20px">新增模板</el-button>
         </router-link>
         <!-- 站点展示表格 -->
         <el-table :data="tableData" style="width: 100%;margin-top:20px">
@@ -11,8 +11,8 @@
             <el-table-column prop="siteId" label="站点ID" width="300"></el-table-column>
             <el-table-column prop="templateName" label="模板名称" width="320"></el-table-column>
             <el-table-column prop="templateParameter" label="模板参数" width="400"></el-table-column>
-            <el-table-column prop="templateFileId" label="模板文件ID" width="250"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column prop="templateFileId" label="模板文件ID"></el-table-column>
+            <el-table-column align="center"  label="操作" fixed="right" width="200px">
               <template slot-scope="scope">
                 <el-button
                   size="small"
@@ -46,7 +46,7 @@
           total: 50,
           params: {
               page: 1,
-              size: 20,
+              size: 10,
           }
         }
       },

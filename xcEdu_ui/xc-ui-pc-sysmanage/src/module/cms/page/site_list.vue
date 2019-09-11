@@ -3,7 +3,7 @@
         <el-button type="primary" icon="el-icon-search" @click="query" style="margin-top: 20px">查询</el-button>
         <!-- 新增站点按钮 -->
         <router-link class="mui-tab-item" :to="{path:'/cms/site/add/'}">
-          <el-button type="primary" icon="el-icon-search" style="margin-top: 20px">新增站点</el-button>
+          <el-button type="primary" icon="el-icon-plus" style="margin-top: 20px">新增站点</el-button>
         </router-link>
         <!-- 站点展示表格 -->
         <el-table :data="tableData" style="width: 100%;margin-top:20px">
@@ -13,7 +13,7 @@
             <el-table-column prop="sitePort" label="站点端口" width="100"></el-table-column>
             <el-table-column prop="siteWebPath" label="访问路径" width="250"></el-table-column>
             <el-table-column prop="siteCreateTime" label="创建时间"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column align="center"  label="操作" fixed="right" width="200px">
               <template slot-scope="scope">
                 <el-button
                   size="small"
@@ -47,7 +47,7 @@
           total: 50,
           params: {
               page: 1,
-              size: 20,
+              size: 10,
           }
         }
       },

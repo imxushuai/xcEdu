@@ -15,10 +15,10 @@
         <el-button type="primary" icon="el-icon-search" @click="query" style="margin-top: 20px">查询</el-button>
         <!-- 新增页面按钮 -->
         <router-link class="mui-tab-item" :to="{path:'/cms/page/add/',query:{ page: this.params.page, siteId: this.params.siteId}}">
-          <el-button type="primary" icon="el-icon-search" style="margin-top: 20px">新增页面</el-button>
+          <el-button type="primary" icon="el-icon-plus" style="margin-top: 20px">新增页面</el-button>
         </router-link>
         <!-- 页面展示表格 -->
-        <el-table :data="tableData" style="width: 100%;margin-top:20px">
+        <el-table :data="tableData" stripe style="width: 100%;margin-top:20px">
             <el-table-column type="index" width="70"></el-table-column>
             <el-table-column prop="pageName" label="页面名称" width="400"></el-table-column>
             <el-table-column prop="pageAliase" label="别名" width="120"></el-table-column>
@@ -26,7 +26,7 @@
             <el-table-column prop="pageWebPath" label="访问路径" width="250"></el-table-column>
             <el-table-column prop="pagePhysicalPath" label="物理路径" width="250"></el-table-column>
             <el-table-column prop="pageCreateTime" label="创建时间"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column align="center"  label="操作" fixed="right" width="200px">
               <template slot-scope="scope">
                 <el-button
                   size="small"
@@ -61,7 +61,7 @@
           total: 50,
           params: {
               page: 1,
-              size: 20,
+              size: 10,
               siteId: '',
               pageAliase:''
           }
