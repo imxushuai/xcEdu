@@ -35,6 +35,9 @@
             <el-form-item label="物理路径" prop="pagePhysicalPath">
                 <el-input v-model="cmsPage.pagePhysicalPath"></el-input>
             </el-form-item>
+            <el-form-item label="DataUrl" prop="dataUrl">
+                <el-input v-model="cmsPage.dataUrl"></el-input>
+            </el-form-item>
             <el-form-item label="类型" prop="pageType">
                 <el-radio-group v-model="cmsPage.pageType">
                 <el-radio label="0">静态</el-radio>
@@ -69,6 +72,7 @@
                 pageWebPath: '', 
                 pageParameter:'', 
                 pagePhysicalPath:'', 
+                dataUrl:'',
                 pageType:'', 
                 pageCreateTime: new Date()
             },
@@ -92,6 +96,9 @@
                 ],
                 pagePhysicalPath: [
                     { required: true, message: '请输入页面名称', trigger: 'blur' }
+                ],
+                dataUrl: [
+                    { required: true, message: '请输入DataUrl', trigger: 'blur' }
                 ],
                 pageType: [
                     { required: true, message: '请选择页面类型', trigger: 'change' }

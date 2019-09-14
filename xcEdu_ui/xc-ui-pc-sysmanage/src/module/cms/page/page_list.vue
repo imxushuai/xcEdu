@@ -36,6 +36,10 @@
                   size="small"
                   type="text"
                   @click="del(scope.$index, scope.row)">删除</el-button>
+                <el-button
+                  size="small"
+                  type="text"
+                  @click="preview(scope.$index, scope.row)">页面预览</el-button>
               </template>
             </el-table-column>
         </el-table>
@@ -119,6 +123,10 @@
               // 重新查询数据
               this.query()
           })
+        },
+        // 页面预览
+        preview:function(index, data) {
+            window.open("http://localhost:31001/cms/preview/" + data.pageId)
         },
         // 页面类型数据格式化
         pageTypeFormatter:function(row, column, cellValue, index) {

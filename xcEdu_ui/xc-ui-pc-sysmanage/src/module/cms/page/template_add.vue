@@ -18,6 +18,20 @@
             <el-form-item label="模板参数" prop="templateParameter">
                 <el-input v-model="cmsTemplate.templateParameter"></el-input>
             </el-form-item>
+            <el-form-item label="模板文件ID">
+                <el-upload
+                    class="upload-demo"
+                    drag
+                    action="http://localhost:11000/api/cms/template/upload"
+                    :multiple="multiple"
+                    :limit="limit"
+                    :on-success="uploadOnSuccess"
+                    :on-remove="onRemove">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
+            </el-form-item>
+
             <el-form-item>
                 <el-button @click="goBack">返回</el-button>
                 <el-button type="primary" @click="onSubmit('cmsTemplateForm')">提交</el-button>
@@ -31,8 +45,11 @@
     export default {
       data() {
         return {
+            multiple:false,
+            limit:1,
             cmsSiteList:[],
             cmsTemplate: {
+                templateFileId: '',
                 templateName: '', 
                 templateParameter: '',
                 siteId: ''
@@ -108,6 +125,28 @@
                     path:'/cms/template/list'
                 })
             }
+        },
+        // 模板文件上传成功
+        uploadOnSuccess:function(response, file, fileList) {
+            if (response) {
+                this.cmsTemplate.templateFileId = response
+                this.$message({
+                    showClose: true,
+                    message: '模板文件上传成功',
+                    type: 'success'
+                })
+            }
+        },
+        // 移除模板文件
+        onRemove:function(file, fileList) {
+            // 调用API 删除文件
+            cmsApi.removeTemplateFileById(this.cmsTemplate.templateFileId).then(res => {
+                this.$message({
+                    showClose: true,
+                    message: '删除成功',
+                    type: 'success'
+                })
+            })
         }
       },
       created() {

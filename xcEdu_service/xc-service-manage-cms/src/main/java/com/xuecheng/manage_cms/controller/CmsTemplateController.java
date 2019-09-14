@@ -2,12 +2,16 @@ package com.xuecheng.manage_cms.controller;
 
 import com.xuecheng.api.cms.CmsTemplateControllerApi;
 import com.xuecheng.framework.domain.cms.CmsTemplate;
+import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsTemplateResult;
+import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.manage_cms.service.CmsTemplateService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("cms/template")
@@ -38,7 +42,7 @@ public class CmsTemplateController implements CmsTemplateControllerApi {
     @Override
     @GetMapping("/{templateId}")
     public CmsTemplateResult getCmsTemplate(@PathVariable("templateId") String templateId) {
-        CmsTemplate cmsTemplate = cmsTemplateService.findBySiteId(templateId);
+        CmsTemplate cmsTemplate = cmsTemplateService.findByTemplateId(templateId);
         if (cmsTemplate == null) {
             return new CmsTemplateResult(CommonCode.FAIL, null);
         }
@@ -54,6 +58,23 @@ public class CmsTemplateController implements CmsTemplateControllerApi {
             return new CmsTemplateResult(CommonCode.FAIL, null);
         }
         return new CmsTemplateResult(CommonCode.SUCCESS, null);
+    }
+
+    @Override
+    @PostMapping("upload")
+    public String uploadTemplate(@RequestParam("file") MultipartFile file) {
+        // 上传文件
+        String templateFileId = cmsTemplateService.uploadTemplateFile(file);
+        if (StringUtils.isBlank(templateFileId)) {
+            ExceptionCast.cast(CmsCode.CMS_TEMPLATE_FILE_UPLOAD_ERROR);
+        }
+        return templateFileId;
+    }
+
+    @Override
+    @DeleteMapping("file/remove/{templateFileId}")
+    public void removeTemplateFile(@PathVariable String templateFileId) {
+        cmsTemplateService.removeTemplateFile(templateFileId);
     }
 
     @Override

@@ -1,34 +1,14 @@
-package com.xuecheng.framework.web;
+package com.xuecheng.framework.service;
 
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.ResultCode;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Created by mrt on 2018/5/22.
+ * 基础Service
  */
-public class BaseController {
-    protected HttpServletRequest request;
+public abstract class BaseService {
 
-    protected HttpServletResponse response;
-
-    protected HttpSession session;
-
-    @ModelAttribute
-    public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
-
-        this.request = request;
-
-        this.response = response;
-
-        this.session = request.getSession();
-
-    }
 
     /**
      * 字符串非空校验并抛出异常

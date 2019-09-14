@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api(value = "CMS模板管理接口", description = "CMS页面模板管理接口，提供模板的增删改查")
 public interface CmsTemplateControllerApi {
@@ -32,5 +33,11 @@ public interface CmsTemplateControllerApi {
 
     @ApiOperation("按ID删除模板")
     CmsTemplateResult deleteById(String templateId);
+
+    @ApiOperation("上传模板文件")
+    String uploadTemplate(MultipartFile file);
+
+    @ApiOperation("移除模板文件")
+    void removeTemplateFile(String templateFileId);
 
 }

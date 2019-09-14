@@ -1,6 +1,12 @@
 server:
   port: 31001
 spring:
+  freemarker:
+    # 关闭缓存
+    cache: false
+    settings:
+      # 模板更新时间，正式环境可以设置较大
+      template_update_delay: 0
   application:
     name: xc‐service‐manage‐cms
   data:
@@ -8,3 +14,7 @@ spring:
       host: 47.107.128.204
       port: 27017
       database: xc_cms
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB

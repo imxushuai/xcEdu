@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
  * 统一异常处理类
@@ -27,6 +28,7 @@ public class ExceptionCatch {
     static {
         OPTIONS = builder
                 .put(HttpMessageNotReadableException.class, CommonCode.PARAMS_ERROR)
+                .put(MissingServletRequestPartException.class, CommonCode.PARAMS_ERROR)
                 .build();
 
     }

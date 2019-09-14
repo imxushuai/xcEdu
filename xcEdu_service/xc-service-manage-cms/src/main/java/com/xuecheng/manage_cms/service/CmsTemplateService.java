@@ -10,7 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +25,10 @@ public class CmsTemplateService {
 
     @Autowired
     private CmsTemplateRepository cmsTemplateRepository;
+
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
 
     public QueryResponseResult findAll() {
         List<CmsTemplate> cmsTemplateList = cmsTemplateRepository.findAll();
@@ -64,7 +72,7 @@ public class CmsTemplateService {
      *
      * @param templateId 模板ID
      */
-    public CmsTemplate findBySiteId(String templateId) {
+    public CmsTemplate findByTemplateId(String templateId) {
         Optional<CmsTemplate> cmsTemplate = cmsTemplateRepository.findById(templateId);
         return cmsTemplate.orElse(null);
     }
@@ -99,7 +107,37 @@ public class CmsTemplateService {
      * @param templateId 模板ID
      */
     public void deleteById(String templateId) {
-        // 查询
-        cmsTemplateRepository.deleteById(templateId);
+        // 删除模板文件
+        Optional<CmsTemplate> templateOptional = cmsTemplateRepository.findById(templateId);
+        if (templateOptional.isPresent()) {
+            Query query = new Query(Criteria.where("_id").is(templateOptional.get().getTemplateFileId()));
+            // 删除文件
+            gridFsTemplate.delete(query);
+            // 删除模板
+            cmsTemplateRepository.deleteById(templateId);
+        }
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param file 文件
+     */
+    public String uploadTemplateFile(MultipartFile file) {
+        try {
+            return gridFsTemplate.store(file.getInputStream(), "template").toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
+     * 移除文件
+     *
+     * @param templateFileId 模板文件ID
+     */
+    public void removeTemplateFile(String templateFileId) {
+        Query query = new Query(Criteria.where("_id").is(templateFileId));
+        gridFsTemplate.delete(query);
     }
 }

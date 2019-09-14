@@ -135,3 +135,10 @@ export const findCmsTemplateById = (pageId) => {
 export const deleteCmsTemplateById = (pageId) => { 
     return http.requestDelete(apiUrl + '/cms/template/'+ pageId)
 }
+
+/**
+ * 按ID删除模板
+ */
+export const removeTemplateFileById = (templateFileId) => { 
+    return http.requestDelete(apiUrl + '/cms/template/file/remove/'+ templateFileId)
+}
