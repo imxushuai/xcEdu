@@ -46,6 +46,13 @@ export const deleteCmsPageById = (pageId) => {
     return http.requestDelete(apiUrl + '/cms/page/'+ pageId)
 }
 
+/**
+ * 页面发布
+ */
+export const postPage = (pageId) => { 
+    return http.requestQuickGet(apiUrl + '/cms/page/post/'+ pageId)
+}
+
 
 /********************************************
  * CMS站点相关API

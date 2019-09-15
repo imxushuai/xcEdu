@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CmsPageService extends BaseService {
+public class PageService extends BaseService {
 
     @Autowired
     private GridFSBucket gridFSBucket;
@@ -62,12 +62,12 @@ public class CmsPageService extends BaseService {
         FileOutputStream fileOutputStream = null;
 
         try {
-            fileOutputStream = new FileOutputStream(new File(cmsPage.getPagePhysicalPath()));
+            fileOutputStream = new FileOutputStream(new File(cmsPage.getPagePhysicalPath() + cmsPage.getPageName()));
             IOUtils.copy(inputStream, fileOutputStream);
         } catch (FileNotFoundException e) {
-            log.error("[页面发布消费方] 文件未找到, 文件路径 = [{}]", cmsPage.getPagePhysicalPath());
+            log.error("[页面发布消费方] 文件未找到, 文件路径 = [{}]", cmsPage.getPagePhysicalPath() + cmsPage.getPageName());
         } catch (IOException e) {
-            log.error("[页面发布消费方] 将文件写入服务器失败, 文件路径 = [{}]", cmsPage.getPagePhysicalPath());
+            log.error("[页面发布消费方] 将文件写入服务器失败, 文件路径 = [{}]", cmsPage.getPagePhysicalPath() + cmsPage.getPageName());
         } finally {
             try {
                 if (fileOutputStream != null) {

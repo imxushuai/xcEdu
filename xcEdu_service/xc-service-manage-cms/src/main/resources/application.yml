@@ -1,6 +1,12 @@
 server:
   port: 31001
 spring:
+  rabbitmq:
+    host: 47.107.128.204
+    port: 5672
+    username: xcEdu
+    password: 123456
+    virtualHost: /
   freemarker:
     # 关闭缓存
     cache: false

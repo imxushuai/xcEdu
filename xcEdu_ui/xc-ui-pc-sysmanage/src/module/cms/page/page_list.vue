@@ -39,6 +39,10 @@
                 <el-button
                   size="small"
                   type="text"
+                  @click="postPage(scope.$index, scope.row)">发布</el-button>
+                <el-button
+                  size="small"
+                  type="text"
                   @click="preview(scope.$index, scope.row)">页面预览</el-button>
               </template>
             </el-table-column>
@@ -122,6 +126,23 @@
               
               // 重新查询数据
               this.query()
+          })
+        },
+        postPage:function(index, data) {
+          this.$confirm('确认发布此页面?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              // 页面发布
+              cmsApi.postPage(data.pageId).then(res => {
+                // 提示消息
+                this.$message({
+                  showClose: true,
+                  message: res.message,
+                  type: 'success'
+                })
+              })
           })
         },
         // 页面预览

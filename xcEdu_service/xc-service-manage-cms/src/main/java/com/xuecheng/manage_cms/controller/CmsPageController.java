@@ -8,6 +8,7 @@ import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_cms.service.CmsPageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,17 @@ public class CmsPageController implements CmsPageControllerApi {
         }
         cmsPageService.deleteById(pageId);
         return new CmsPageResult(CommonCode.SUCCESS, null);
+    }
+
+    /**
+     * 页面发布
+     *
+     * @param pageId 页面ID
+     */
+    @Override
+    @GetMapping("post/{pageId}")
+    public ResponseResult postPage(@PathVariable String pageId) {
+        return cmsPageService.postPage(pageId);
     }
 
     @Override
