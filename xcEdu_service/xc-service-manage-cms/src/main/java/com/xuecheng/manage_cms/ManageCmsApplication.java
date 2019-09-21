@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @EntityScan("com.xuecheng.framework.domain.cms")
 @ComponentScan(basePackages={"com.xuecheng.api"})
 @ComponentScan(basePackages={"com.xuecheng.manage_cms"})
+@ComponentScan(basePackages={"com.xuecheng.system"})
 @ComponentScan(basePackages={"com.xuecheng.framework"})
 public class ManageCmsApplication {
 

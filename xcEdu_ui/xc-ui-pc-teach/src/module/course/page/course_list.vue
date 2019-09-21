@@ -48,18 +48,7 @@
         page:1,
         size:15,
         total: 0,
-        courses: [
-          {
-            id:'test01',
-            name:'test01',
-            pic:''
-          },
-          {
-            id:'test02',
-            name:'test02',
-            pic:''
-          }
-          ],
+        courses: [],
         sels: [],//列表选中列
         imgUrl:sysConfig.imgUrl
       }

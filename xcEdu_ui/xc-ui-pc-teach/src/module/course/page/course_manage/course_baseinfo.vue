@@ -134,14 +134,15 @@
       });
       //查询课程信息
         //课程id
+        // debugger
         this.courseid = this.$route.params.courseid;
-         courseApi.getCoursebaseById(this.courseid).then((res) => {
+        courseApi.getCoursebaseById(this.courseid).then((res) => {
 //          console.log(res);
-          this.courseForm = res;
-          //课程分类显示，需要两级分类
-          this.categoryActive.push(this.courseForm.mt);
-          this.categoryActive.push(this.courseForm.st);
-        });
+        this.courseForm = res.courseBase;
+        //课程分类显示，需要两级分类
+        this.categoryActive.push(this.courseForm.mt);
+        this.categoryActive.push(this.courseForm.st);
+      });
     }
   }
 </script>

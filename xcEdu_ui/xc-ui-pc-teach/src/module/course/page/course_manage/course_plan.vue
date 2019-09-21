@@ -49,7 +49,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item  >
-          <el-button type="primary" v-on:click="addTeachplan">提交</el-button>
+          <el-button type="primary" v-on:click="save">提交</el-button>
           <el-button type="primary" v-on:click="resetForm">重置</el-button>
         </el-form-item>
 
@@ -112,16 +112,16 @@
           //得到当前的课程计划
           this.teachplanId = data.id
 //        alert(this.teachplanId)
-          this.mediaFormVisible = true;//打开窗口
+          this.mediaFormVisible = true//打开窗口
       },
       //保存选择的视频
       choosemedia(mediaId,fileOriginalName,mediaUrl){
         //保存视频到课程计划表中
         let teachplanMedia ={}
-        teachplanMedia.mediaId =mediaId;
-        teachplanMedia.mediaFileOriginalName =fileOriginalName;
-        teachplanMedia.mediaUrl =mediaUrl;
-        teachplanMedia.courseId =this.courseid;
+        teachplanMedia.mediaId =mediaId
+        teachplanMedia.mediaFileOriginalName =fileOriginalName
+        teachplanMedia.mediaUrl =mediaUrl
+        teachplanMedia.courseId =this.courseid
         //课程计划
         teachplanMedia.teachplanId=this.teachplanId
 
@@ -135,8 +135,16 @@
             }
         })
       },
+      save() {
+        if (this.teachplanActive.id !== undefined && this.teachplanActive.id !== '') {
+          this.edit(this.teachplanActive)
+        } else {
+          this.addTeachplan()
+        }
+      },
       //提交课程计划
       addTeachplan(){
+        this.resetForm()
         //校验表单
         this.$refs.teachplanForm.validate((valid) => {
             if (valid) {
@@ -145,7 +153,12 @@
               this.teachplanActive.courseid = this.courseid
               courseApi.addTeachplan(this.teachplanActive).then(res=>{
                 if(res.success){
-                    this.$message.success("添加成功")
+                    this.$message({
+                        showClose: true,
+                        message: res.message,
+                        type: 'success'
+                    })
+                    this.teachplayFormVisible = false
                     //刷新树
                     this.findTeachplan()
                 }else{
@@ -162,21 +175,67 @@
       },
 
       append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] };
+        const newChild = { id: id++, label: 'testtest', children: [] }
         if (!data.children) {
-          this.$set(data, 'children', []);
+          this.$set(data, 'children', [])
         }
-        data.children.push(newChild);
+        data.children.push(newChild)
 
       },
       edit(data){
-        //alert(data.id);
+        // 查询
+        courseApi.findTeachplanById(data.id).then(res => {
+          this.teachplanActive = res
+          if (res.grade === '2') {
+            this.teachplanActive.parentid = ''
+          }
+          this.teachplayFormVisible = true
+        })
+        //校验表单
+        this.$refs.teachplanForm.validate((valid) => {
+            if (valid) {
+                //调用api方法
+              //将课程id设置到teachplanActive
+              this.teachplanActive.courseid = this.courseid
+              courseApi.editTeachplan(this.teachplanActive).then(res=>{
+                if(res.success){
+                    this.$message({
+                        showClose: true,
+                        message: res.message,
+                        type: 'success'
+                    })
+                    this.teachplayFormVisible = false
+                    //刷新树
+                    this.findTeachplan()
+                }else{
+                  this.$message.error(res.message)
+                }
+
+              })
+            }
+        })
       },
       remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+        // 执行删除
+        this.$confirm('确认删除该课程计划?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              // 删除
+              courseApi.deleteTeachplan(data.id).then(res => {
+                // 提示消息
+                this.$message({
+                  showClose: true,
+                  message: res.message,
+                  type: 'success'
+                })
+                //刷新树
+                this.findTeachplan()
+              })
+              
+            
+          })
 
       },
       renderContent(h, { node, data, store }) {
@@ -197,7 +256,7 @@
         //查询课程计划
         courseApi.findTeachplanList(this.courseid).then(res=>{
             if(res && res.children){
-              this.teachplanList = res.children;
+              this.teachplanList = res.children
             }
 
 
@@ -206,9 +265,9 @@
     },
     mounted(){
       //课程id
-      this.courseid = this.$route.params.courseid;
+      this.courseid = this.$route.params.courseid
       //查询课程计划
-      // this.findTeachplan()
+      this.findTeachplan()
 
     }
   }

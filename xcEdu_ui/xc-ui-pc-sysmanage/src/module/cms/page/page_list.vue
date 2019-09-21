@@ -122,10 +122,10 @@
                   message: res.message,
                   type: 'success'
                 })
+                // 重新查询数据
+                this.query()
               })
               
-              // 重新查询数据
-              this.query()
           })
         },
         postPage:function(index, data) {

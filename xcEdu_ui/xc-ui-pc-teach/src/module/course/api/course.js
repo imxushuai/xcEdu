@@ -19,13 +19,29 @@ export const category_findlist= () => {
 export const addCourseBase = params => {
   return http.requestPost(apiUrl+'/course/coursebase/add',params)
 }
+/*查询课程基础信息*/
+export const getCoursebaseById = courseId => {
+  return http.requestQuickGet(apiUrl+'/course/coursebase/' + courseId)
+}
 /*查询课程计划*/
 export const findTeachplanList = courseid => {
   return http.requestQuickGet(apiUrl+'/course/teachplan/list/'+courseid)
 }
+/*查询课程计划*/
+export const findTeachplanById = teachplanById => {
+  return http.requestQuickGet(apiUrl+'/course/teachplan/'+teachplanById)
+}
 /*添加课程计划*/
 export const addTeachplan = teachplah => {
   return http.requestPost(apiUrl+'/course/teachplan/add',teachplah)
+}
+/*编辑课程计划*/
+export const editTeachplan = teachplah => {
+  return http.requestPut(apiUrl+'/course/teachplan/edit',teachplah)
+}
+/*删除课程计划*/
+export const deleteTeachplan = teachplahId => {
+  return http.requestDelete(apiUrl+'/course/teachplan/' + teachplahId)
 }
 
 //保存课程图片地址到课程数据 库
