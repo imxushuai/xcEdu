@@ -2,7 +2,7 @@ server:
   port: 31001
 spring:
   rabbitmq:
-    host: 47.107.128.204
+    host: 192.168.136.110
     port: 5672
     username: xcEdu
     password: 123456
@@ -17,7 +17,7 @@ spring:
     name: xc‐service‐manage‐cms
   data:
     mongodb:
-      host: 47.107.128.204
+      host: 192.168.136.110
       port: 27017
       database: xc_cms
   servlet:

@@ -1,6 +1,5 @@
 package com.xuecheng.manage_cms.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -35,6 +34,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -281,12 +281,11 @@ public class CmsPageService extends BaseService {
             ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAURLISNULL);
         }
         // 获取模型数据
-        Map templateForObject = restTemplate.getForObject(cmsPage.getDataUrl(), Map.class);
-        if (templateForObject != null && templateForObject.get("cmsConfig") == null) {
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity(cmsPage.getDataUrl(), Map.class);
+        if (forEntity.getBody() == null) {
             ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAISNULL);
         }
-        assert templateForObject != null;
-        return JSON.parseObject(JSON.toJSONString(templateForObject.get("cmsConfig")), Map.class);
+        return forEntity.getBody();
     }
 
     /**
@@ -351,5 +350,19 @@ public class CmsPageService extends BaseService {
         // 保存文件ID到CmsPage
         cmsPage.setHtmlFileId(objectId.toString());
         return cmsPageRepository.save(cmsPage);
+    }
+
+    public CmsPage save(CmsPage cmsPage) {
+        CmsPage _cmsPage = cmsPageRepository
+                .findBySiteIdAndPageNameAndPageWebPath(cmsPage.getSiteId(), cmsPage.getPageName(), cmsPage.getPageWebPath());
+        if (_cmsPage == null) {
+            // 新增
+            cmsPage = add(cmsPage);
+        } else {
+            // 更新
+            cmsPage = edit(cmsPage);
+        }
+
+        return cmsPage;
     }
 }

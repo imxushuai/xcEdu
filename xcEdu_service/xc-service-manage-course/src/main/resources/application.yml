@@ -5,7 +5,7 @@ spring:
     name: xc-service-manage-course
   datasource:
     druid:
-      url: jdbc:mysql://47.107.128.204:3306/xc_course?characterEncoding=utf-8
+      url: jdbc:mysql://192.168.136.110:3306/xc_course?characterEncoding=utf-8
       username: root
       password: 123456
       driverClassName: com.mysql.jdbc.Driver
@@ -29,3 +29,10 @@ eureka:
     prefer‐ip‐address: true  #将自己的ip地址注册到Eureka服务中
     ip‐address: ${IP_ADDRESS:127.0.0.1}
     instance‐id: ${spring.application.name}:${server.port} #指定实例id
+course‐publish:
+  siteId: 5d8cd1d35f31573b5c6e4f11
+  templateId: 5d8ccd635f31573b5c6e4f0e
+  previewUrl: http://www.xuecheng.com/cms/preview/
+  pageWebPath: /course/detail/
+  pagePhysicalPath: F:/xcEdu/xcEdu_ui/static/course/detail/
+  dataUrlPre: http://localhost:31200/course/courseview/

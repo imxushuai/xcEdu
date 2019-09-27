@@ -75,6 +75,16 @@ public class CmsPageController implements CmsPageControllerApi {
     }
 
     @Override
+    @PostMapping("save")
+    public CmsPageResult save(CmsPage cmsPage) {
+        CmsPage save = cmsPageService.save(cmsPage);
+        if (save == null) {
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
+        return new CmsPageResult(CommonCode.SUCCESS, save);
+    }
+
+    @Override
     @PutMapping
     public CmsPageResult edit(@RequestBody CmsPage cmsPage) {
         if (cmsPage == null) {

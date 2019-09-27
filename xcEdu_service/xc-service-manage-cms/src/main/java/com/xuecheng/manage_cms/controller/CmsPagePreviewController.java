@@ -33,6 +33,7 @@ public class CmsPagePreviewController extends BaseController {
         // 输出到页面返回
         try {
             ServletOutputStream outputStream = response.getOutputStream();
+            response.setHeader("Content-type","text/html;charset=utf-8");
             outputStream.write(htmlContent.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             log.error("[CMS页面预览] 预览页面失败，异常信息：{}", e);
