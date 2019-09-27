@@ -360,6 +360,7 @@ public class CmsPageService extends BaseService {
             cmsPage = add(cmsPage);
         } else {
             // 更新
+            cmsPage.setPageId(_cmsPage.getPageId());
             cmsPage = edit(cmsPage);
         }
 

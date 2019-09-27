@@ -59,7 +59,7 @@ export const deleteCoursePic= courseId => {
 }
 /*预览课程*/
 export const preview = id => {
-  return http.requestPost(apiUrl+'/course/preview/'+id);
+  return http.requestPost(apiUrl+'/course/courseview/preview/'+id);
 }
 /*发布课程*/
 export const publish = id => {

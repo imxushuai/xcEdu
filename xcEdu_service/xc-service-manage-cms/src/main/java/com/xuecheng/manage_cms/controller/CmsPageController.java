@@ -76,7 +76,7 @@ public class CmsPageController implements CmsPageControllerApi {
 
     @Override
     @PostMapping("save")
-    public CmsPageResult save(CmsPage cmsPage) {
+    public CmsPageResult save(@RequestBody CmsPage cmsPage) {
         CmsPage save = cmsPageService.save(cmsPage);
         if (save == null) {
             ExceptionCast.cast(CommonCode.FAIL);
