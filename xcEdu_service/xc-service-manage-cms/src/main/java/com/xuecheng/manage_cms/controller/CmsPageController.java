@@ -5,6 +5,7 @@ import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -82,6 +83,22 @@ public class CmsPageController implements CmsPageControllerApi {
             ExceptionCast.cast(CommonCode.FAIL);
         }
         return new CmsPageResult(CommonCode.SUCCESS, save);
+    }
+
+    /**
+     * cms page页面一键发布
+     *
+     * @param cmsPage 页面信息
+     * @return CmsPostPageResult
+     */
+    @Override
+    @PostMapping("postPageQuick")
+    public CmsPostPageResult postPageQuick(@RequestBody CmsPage cmsPage) {
+        String url = cmsPageService.postPageQuick(cmsPage);
+        if (StringUtils.isBlank(url)) {
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
+        return new CmsPostPageResult(CommonCode.SUCCESS, url);
     }
 
     @Override

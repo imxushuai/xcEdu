@@ -59,13 +59,13 @@ export default{
         //调用课程管理服务的预览接口，得到课程预览url
       courseApi.preview(this.courseid).then((res) => {
         if(res.success){
-          this.$message.error('预览页面生成成功，请点击下方预览链接');
+          this.$message.error('预览页面生成成功，请点击下方预览链接')
           if(res.previewUrl){
             //预览url
             this.previewurl = res.previewUrl
           }
         }else{
-          this.$message.error(res.message);
+          this.$message.error(res.message)
         }
       });
     },
@@ -74,7 +74,7 @@ export default{
       courseApi.publish(this.courseid).then(res=>{
           if(res.success){
               this.$message.success("发布成功，请点击下边的链接查询课程详情页面")
-
+              this.getCourseView()
           }else{
             this.$message.error(res.message)
           }
@@ -85,7 +85,7 @@ export default{
       courseApi.findCourseView(this.courseid).then(res=>{
         if(res && res.courseBase){
             //获取课程状态
-            this.course.status = res.courseBase.status;
+            this.course.status = res.courseBase.status
         }
 
       })
@@ -94,9 +94,9 @@ export default{
   },
   mounted(){
     //课程id
-    this.courseid = this.$route.params.courseid;
+    this.courseid = this.$route.params.courseid
     //查询课程信息
-    this.getCourseView();
+    this.getCourseView()
   }
 
   }

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("course/courseview")
+@RequestMapping("course")
 public class CourseViewController extends BaseController implements CourseViewControllerApi {
 
     @Autowired
@@ -25,7 +25,7 @@ public class CourseViewController extends BaseController implements CourseViewCo
      * @return CourseView
      */
     @Override
-    @GetMapping("{id}")
+    @GetMapping("courseview/{id}")
     public CourseView courseview(@PathVariable String id) {
         return courseService.getCourseView(id);
     }
@@ -37,12 +37,26 @@ public class CourseViewController extends BaseController implements CourseViewCo
      * @return CoursePublishResult
      */
     @Override
-    @PostMapping("preview/{id}")
+    @PostMapping("courseview/preview/{id}")
     public CoursePublishResult coursePreview(@PathVariable String id) {
         String preview = courseService.preview(id);
         if (StringUtils.isBlank(preview)) {
             return new CoursePublishResult(CommonCode.FAIL, null);
         }
         return new CoursePublishResult(CommonCode.SUCCESS, preview);
+    }
+
+    /**
+     * 课程发布
+     *
+     * @param id 课程ID
+     * @return CoursePublishResult
+     */
+    @Override
+    @PostMapping("publish/{id}")
+    public CoursePublishResult coursePublish(@PathVariable String id) {
+        String publishUrl = courseService.publish(id);
+        isNullOrEmpty(publishUrl, CommonCode.FAIL);
+        return new CoursePublishResult(CommonCode.SUCCESS, publishUrl);
     }
 }

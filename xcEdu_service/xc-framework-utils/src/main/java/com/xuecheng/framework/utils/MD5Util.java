@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -124,7 +125,7 @@ public class MD5Util {
     public static String getStringMD5(String str) {
         StringBuilder sb = new StringBuilder();
         try {
-            byte[] data = str.getBytes("utf-8");
+            byte[] data = str.getBytes(StandardCharsets.UTF_8);
             MessageDigest MD5 = MessageDigest.getInstance("MD5");
             MD5.update(data);
             data = MD5.digest();

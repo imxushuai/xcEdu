@@ -2,6 +2,7 @@ package com.xuecheng.manage_course.service;
 
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
@@ -16,6 +17,7 @@ import com.xuecheng.manage_course.dao.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -43,6 +45,9 @@ public class CourseService extends BaseService {
 
     @Autowired
     private CoursePublishConfig coursePublishConfig;
+
+    @Autowired
+    private CourseBaseService courseBaseService;
 
 
     /**
@@ -80,6 +85,66 @@ public class CourseService extends BaseService {
      * @return previewUrl
      */
     public String preview(String id) {
+        // 构造cmsPage信息
+        CmsPage cmsPage = buildCmsPage(id);
+
+        CmsPageResult save = cmsPageClient.save(cmsPage);
+        if (save.isSuccess()) {
+            return coursePublishConfig.getPreviewUrl() + save.getCmsPage().getPageId();
+        }
+
+        return null;
+    }
+
+    /**
+     * 课程发布
+     *
+     * @param id 课程ID
+     * @return 课程页面路径url
+     */
+    @Transactional
+    public String publish(String id) {
+        // 构造cmsPage信息
+        CmsPage cmsPage = buildCmsPage(id);
+
+        // 发布
+        CmsPostPageResult cmsPostPageResult = cmsPageClient.postPageQuick(cmsPage);
+        if (!cmsPostPageResult.isSuccess()) {
+            ExceptionCast.cast(CourseCode.COURSE_PUBLISH_VIEWERROR);
+        }
+
+        // 更新课程状态
+        saveCoursePubState(id, "202002");
+
+        return cmsPostPageResult.getPageUrl();
+    }
+
+    /**
+     * 更新课程状态
+     * 状态值列表：
+     *      制作中：202001
+     *      已发布：202002
+     *      已下线：202003
+     *
+     * @param courseId 课程ID
+     * @param status   状态值
+     * @return CourseBase
+     */
+    private CourseBase saveCoursePubState(String courseId, String status) {
+        CourseBase courseBase = courseBaseService.findById(courseId);
+        //更新发布状态
+        courseBase.setStatus(status);
+        return courseBaseRepository.save(courseBase);
+    }
+
+
+    /**
+     * 使用课程ID构造Cms Page信息
+     *
+     * @param id 课程ID
+     * @return CmsPage
+     */
+    private CmsPage buildCmsPage(String id) {
         // 查询课程基本信息
         Optional<CourseBase> courseBaseOptional = courseBaseRepository.findById(id);
         if (!courseBaseOptional.isPresent()) {
@@ -91,15 +156,11 @@ public class CourseService extends BaseService {
         cmsPage.setSiteId(coursePublishConfig.getSiteId());
         cmsPage.setTemplateId(coursePublishConfig.getTemplateId());
         cmsPage.setPageAliase(courseBase.getName());
+        cmsPage.setPageName(courseBase.getId() + ".html");
         cmsPage.setPageWebPath(coursePublishConfig.getPageWebPath());
         cmsPage.setPagePhysicalPath(coursePublishConfig.getPagePhysicalPath());
         cmsPage.setDataUrl(coursePublishConfig.getDataUrlPre() + courseBase.getId());
 
-        CmsPageResult save = cmsPageClient.save(cmsPage);
-        if (save.isSuccess()) {
-            return coursePublishConfig.getPreviewUrl() + save.getCmsPage().getPageId();
-        }
-
-        return null;
+        return cmsPage;
     }
 }

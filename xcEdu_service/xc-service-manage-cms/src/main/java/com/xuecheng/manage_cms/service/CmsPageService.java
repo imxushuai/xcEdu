@@ -5,6 +5,7 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.CmsTemplate;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
@@ -16,6 +17,7 @@ import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.service.BaseService;
 import com.xuecheng.manage_cms.config.RabbitmqConfig;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
+import com.xuecheng.manage_cms.dao.CmsSiteRepository;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -42,6 +44,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,6 +69,9 @@ public class CmsPageService extends BaseService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private CmsSiteRepository cmsSiteRepository;
 
     /**
      * 分页查询页面列表
@@ -259,7 +265,7 @@ public class CmsPageService extends BaseService {
         //获取流中的数据
         String content = null;
         try {
-            content = IOUtils.toString(gridFsResource.getInputStream(), "utf-8");
+            content = IOUtils.toString(gridFsResource.getInputStream(), StandardCharsets.UTF_8);
         } catch (IOException ignored) {
         }
         return content;
@@ -344,7 +350,7 @@ public class CmsPageService extends BaseService {
         }
 
         // 保存生成的html
-        InputStream inputStream = IOUtils.toInputStream(htmlContent);
+        InputStream inputStream = IOUtils.toInputStream(htmlContent, StandardCharsets.UTF_8);
         ObjectId objectId = gridFsTemplate.store(inputStream, cmsPage.getPageName());
 
         // 保存文件ID到CmsPage
@@ -352,6 +358,12 @@ public class CmsPageService extends BaseService {
         return cmsPageRepository.save(cmsPage);
     }
 
+    /**
+     * 保存Cms Page
+     *
+     * @param cmsPage cmsPage
+     * @return CmsPage
+     */
     public CmsPage save(CmsPage cmsPage) {
         CmsPage _cmsPage = cmsPageRepository
                 .findBySiteIdAndPageNameAndPageWebPath(cmsPage.getSiteId(), cmsPage.getPageName(), cmsPage.getPageWebPath());
@@ -365,5 +377,42 @@ public class CmsPageService extends BaseService {
         }
 
         return cmsPage;
+    }
+
+    /**
+     * 静态页面一键发布
+     *
+     * @param cmsPage 页面信息
+     * @return 页面路径url
+     */
+    public String postPageQuick(CmsPage cmsPage) {
+        // 保存Cms Page数据
+        CmsPage save = save(cmsPage);
+        isNullOrEmpty(save, CommonCode.FAIL);
+
+        // 静态化并保存页面文件
+        ResponseResult postPage = postPage(save.getPageId());
+        if (!postPage.isSuccess()) {
+            ExceptionCast.cast(CommonCode.FAIL);
+        }
+
+        // 生成url
+        StringBuffer buffer = new StringBuffer();
+        Optional<CmsSite> cmsSiteOptional = cmsSiteRepository.findById(save.getSiteId());
+        CmsSite cmsSite = cmsSiteOptional.orElse(null);
+        isNullOrEmpty(cmsSite, CommonCode.FAIL);
+
+        assert cmsSite != null;
+        String siteDomain = cmsSite.getSiteDomain();
+        String siteWebPath = cmsSite.getSiteWebPath();
+        String pageWebPath = cmsPage.getPageWebPath();
+        String pageName = cmsPage.getPageName();
+
+        return buffer
+                .append(siteDomain)
+                .append(siteWebPath)
+                .append(pageWebPath)
+                .append(pageName)
+                .toString();
     }
 }

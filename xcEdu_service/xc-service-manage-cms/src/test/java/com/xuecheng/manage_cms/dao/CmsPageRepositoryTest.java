@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,7 +90,7 @@ public class CmsPageRepositoryTest {
         //创建gridFsResource，用于获取流对象
         GridFsResource gridFsResource = new GridFsResource(gridFSFile,gridFSDownloadStream);
         //获取流中的数据
-        String s = IOUtils.toString(gridFsResource.getInputStream(), "utf-8");
+        String s = IOUtils.toString(gridFsResource.getInputStream(), StandardCharsets.UTF_8);
         System.out.println(s);
 
     }
