@@ -1,11 +1,13 @@
 package com.xuecheng.manage_course.service;
 
+import com.alibaba.fastjson.JSON;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.CoursePic;
+import com.xuecheng.framework.domain.course.CoursePub;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.response.CourseCode;
@@ -15,10 +17,14 @@ import com.xuecheng.manage_course.client.CmsPageClient;
 import com.xuecheng.manage_course.config.CoursePublishConfig;
 import com.xuecheng.manage_course.dao.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -49,6 +55,8 @@ public class CourseService extends BaseService {
     @Autowired
     private CourseBaseService courseBaseService;
 
+    @Autowired
+    private CoursePubRepository coursePubRepository;
 
     /**
      * 查询课程预览所需数据
@@ -116,7 +124,82 @@ public class CourseService extends BaseService {
         // 更新课程状态
         saveCoursePubState(id, "202002");
 
+        // 更新课程索引
+        saveCoursePub(id, coursePubRepository.findById(id).orElse(null));
+
         return cmsPostPageResult.getPageUrl();
+    }
+
+    /**
+     * 保存课程信息
+     *
+     * @param id        课程ID
+     * @param coursePub 课程信息
+     * @return CoursePub
+     */
+    public CoursePub saveCoursePub(String id, CoursePub coursePub) {
+        if (StringUtils.isNotEmpty(id)) {
+            ExceptionCast.cast(CourseCode.COURSE_PUBLISH_COURSEIDISNULL);
+        }
+        CoursePub coursePubNew = null;
+        Optional<CoursePub> coursePubOptional = coursePubRepository.findById(id);
+        if (coursePubOptional.isPresent()) {
+            coursePubNew = coursePubOptional.get();
+        }
+        if (coursePubNew == null) {
+            coursePubNew = new CoursePub();
+        }
+
+        BeanUtils.copyProperties(coursePub, coursePubNew);
+        //设置主键
+        coursePubNew.setId(id);
+        //更新时间戳为最新时间
+        coursePub.setTimestamp(new Date());
+        //发布时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy‐MM‐dd HH:mm:ss");
+        String date = simpleDateFormat.format(new Date());
+        coursePub.setPubTime(date);
+        coursePubRepository.save(coursePub);
+        return coursePub;
+
+    }
+
+    /**
+     * 创建
+     *
+     * @param id
+     * @return
+     */
+    private CoursePub createCoursePub(String id) {
+        CoursePub coursePub = new CoursePub();
+        coursePub.setId(id);
+
+        //基础信息
+        Optional<CourseBase> courseBaseOptional = courseBaseRepository.findById(id);
+        if (courseBaseOptional.isPresent()) {
+            CourseBase courseBase = courseBaseOptional.get();
+            BeanUtils.copyProperties(courseBase, coursePub);
+        }
+        //查询课程图片
+        Optional<CoursePic> picOptional = coursePicRepository.findById(id);
+        if (picOptional.isPresent()) {
+            CoursePic coursePic = picOptional.get();
+            BeanUtils.copyProperties(coursePic, coursePub);
+        }
+
+        //课程营销信息
+        Optional<CourseMarket> marketOptional = courseMarketRepository.findById(id);
+        if (marketOptional.isPresent()) {
+            CourseMarket courseMarket = marketOptional.get();
+            BeanUtils.copyProperties(courseMarket, coursePub);
+        }
+
+        //课程计划
+        TeachplanNode teachplanNode = coursePlanMapper.findList(id);
+        //将课程计划转成json
+        String teachPlanString = JSON.toJSONString(teachplanNode);
+        coursePub.setTeachplan(teachPlanString);
+        return coursePub;
     }
 
     /**

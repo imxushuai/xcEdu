@@ -43,6 +43,10 @@
         <artifactId>spring-data-mongodb</artifactId>
         <version>1.10.9.RELEASE</version>
     </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
     <dependency>
         <groupId>org.hibernate</groupId>

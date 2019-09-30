@@ -1,0 +1,11 @@
+server:
+  port: 40100
+spring:
+  application:
+    name: xc-search-service
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.136.110:9300
+      cluster-name: docker-cluster
+elasticsearch:
+  source_field: id,name,grade,mt,st,charge,valid,pic,qq,price,price_old,status,studymodel,teachmode,expires,pub_time,start_time,end_time
