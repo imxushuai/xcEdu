@@ -10,6 +10,7 @@
         <module>../xc-service-manage-course</module>
         <module>../xc-service-base-filesystem</module>
         <module>../xc-service-search</module>
+        <module>../xc-service-manage-media</module>
         <module>../xc-framework-common</module>
         <module>../xc-framework-model</module>
         <module>../xc-framework-utils</module>

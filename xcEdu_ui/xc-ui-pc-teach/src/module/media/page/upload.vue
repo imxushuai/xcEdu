@@ -106,7 +106,7 @@
                 },
                 dataType:"json",
                 success:function(response) {
-                  if(response.ifExist) {
+                  if(response.fileExist) {
                     // 分块存在，跳过该分块
                     deferred.reject();
                   } else {
