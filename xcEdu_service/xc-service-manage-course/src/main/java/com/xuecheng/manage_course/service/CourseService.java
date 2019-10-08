@@ -4,14 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
 import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
-import com.xuecheng.framework.domain.course.CourseBase;
-import com.xuecheng.framework.domain.course.CourseMarket;
-import com.xuecheng.framework.domain.course.CoursePic;
-import com.xuecheng.framework.domain.course.CoursePub;
+import com.xuecheng.framework.domain.course.*;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.response.CourseCode;
 import com.xuecheng.framework.exception.ExceptionCast;
+import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.service.BaseService;
 import com.xuecheng.manage_course.client.CmsPageClient;
 import com.xuecheng.manage_course.config.CoursePublishConfig;
@@ -57,6 +55,9 @@ public class CourseService extends BaseService {
 
     @Autowired
     private CoursePubRepository coursePubRepository;
+
+    @Autowired
+    private TeachplanMediaRepository teachplanMediaRepository;
 
     /**
      * 查询课程预览所需数据
@@ -205,9 +206,9 @@ public class CourseService extends BaseService {
     /**
      * 更新课程状态
      * 状态值列表：
-     *      制作中：202001
-     *      已发布：202002
-     *      已下线：202003
+     * 制作中：202001
+     * 已发布：202002
+     * 已下线：202003
      *
      * @param courseId 课程ID
      * @param status   状态值
@@ -245,5 +246,37 @@ public class CourseService extends BaseService {
         cmsPage.setDataUrl(coursePublishConfig.getDataUrlPre() + courseBase.getId());
 
         return cmsPage;
+    }
+
+    /**
+     * 保存课程计划关联媒资数据
+     *
+     * @param teachplanMedia 关联树数据
+     * @return TeachplanMedia
+     */
+    public TeachplanMedia saveMedia(TeachplanMedia teachplanMedia) {
+        isNullOrEmpty(teachplanMedia, CommonCode.PARAMS_ERROR);
+        // 查询课程计划
+        Teachplan teachplan = coursePlanRepository.findById(teachplanMedia.getTeachplanId()).orElse(null);
+        isNullOrEmpty(teachplan, CourseCode.COURSE_MEDIS_TEACHPLAN_IS_NULL);
+
+        // 只允许叶子节点选择视频
+        String grade = teachplan.getGrade();
+        if (StringUtils.isEmpty(grade) || !grade.equals("3")) {
+            ExceptionCast.cast(CourseCode.COURSE_MEDIA_TEACHPLAN_GRADE_ERROR);
+        }
+        TeachplanMedia media;
+
+        Optional<TeachplanMedia> teachplanMediaOptional = teachplanMediaRepository.findById(teachplanMedia.getTeachplanId());
+        media = teachplanMediaOptional.orElseGet(TeachplanMedia::new);
+
+        //保存媒资信息与课程计划信息
+        media.setTeachplanId(teachplanMedia.getTeachplanId());
+        media.setCourseId(teachplanMedia.getCourseId());
+        media.setMediaFileOriginalName(teachplanMedia.getMediaFileOriginalName());
+        media.setMediaId(teachplanMedia.getMediaId());
+        media.setMediaUrl(teachplanMedia.getMediaUrl());
+
+        return teachplanMediaRepository.save(media);
     }
 }

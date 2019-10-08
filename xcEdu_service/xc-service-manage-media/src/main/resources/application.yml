@@ -8,6 +8,12 @@ spring:
       host: 192.168.136.110
       port: 27017
       database: xc_media
+  rabbitmq:
+    host: 192.168.136.110
+    port: 5672
+    username: xcEdu
+    password: 123456
+    virtual-host: /
 eureka:
   client:
     registerWithEureka: true #服务注册开关
@@ -26,3 +32,6 @@ ribbon:
   ReadTimeout: 6000 #请求处理的超时时间
 xc-service-manage-media:
   upload-location: ${MEDIA_FILE_LOCATION:E:/nginx/xcEdu/video/}
+  mq:
+    queue-media-video-processor: queue_media_video_processor
+    routingkey-media-video: routingkey_media_video

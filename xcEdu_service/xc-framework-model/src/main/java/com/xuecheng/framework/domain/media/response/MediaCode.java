@@ -15,7 +15,12 @@ public enum MediaCode implements ResultCode {
     UPLOAD_FILE_REGISTER_EXIST(false,22002,"上传文件在系统已存在！"),
     CHUNK_FILE_EXIST_CHECK(true,22003,"分块文件在系统已存在！"),
     MERGE_FILE_FAIL(false,22004,"合并文件失败，文件在系统已存在！"),
-    MERGE_FILE_CHECKFAIL(false,22005,"合并文件校验失败！");
+    MERGE_FILE_CHECKFAIL(false,22005,"合并文件校验失败！"),
+    MEDIA_FILE_NOT_EXIST(false,22006,"媒资文件不存在！"),
+    MEDIA_BUILD_MP4_FAIL(false,22007,"生成MP4文件失败！"),
+    MEDIA_BUILD_M3U8_FAIL(false,22008,"生成m3u8文件失败！"),
+    MEDIA_SAVE_FAIL(false,22009,"媒资文件保存数据库失败！"),
+    ;
 
     //操作代码
     @ApiModelProperty(value = "媒资系统操作是否成功", example = "true", required = true)

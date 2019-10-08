@@ -2,12 +2,14 @@ package com.xuecheng.manage_course.controller;
 
 import com.xuecheng.api.course.CoursePlanControllerApi;
 import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.TeachplanMedia;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.response.CourseCode;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.manage_course.service.CoursePlanService;
+import com.xuecheng.manage_course.service.CourseService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class CoursePlanController extends BaseController implements CoursePlanCo
 
     @Autowired
     private CoursePlanService coursePlanService;
+
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 查询指定课程的课程ID
@@ -91,6 +96,14 @@ public class CoursePlanController extends BaseController implements CoursePlanCo
     @DeleteMapping("{teachplanId}")
     public ResponseResult delete(@PathVariable String teachplanId) {
         coursePlanService.deleteById(teachplanId);
+        return ResponseResult.SUCCESS();
+    }
+
+    @Override
+    @PostMapping("savemedia")
+    public ResponseResult saveMedia(@RequestBody TeachplanMedia teachplanMedia) {
+        TeachplanMedia saveMedia = courseService.saveMedia(teachplanMedia);
+        isNullOrEmpty(saveMedia, CommonCode.SERVER_ERROR);
         return ResponseResult.SUCCESS();
     }
 }

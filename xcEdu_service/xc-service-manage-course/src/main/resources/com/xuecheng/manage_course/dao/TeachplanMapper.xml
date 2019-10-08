@@ -11,6 +11,8 @@
             <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
                 <id column="three_id" property="id" />
                 <result column="three_name" property="pname" />
+                <result column="mediaId" property="mediaId" />
+                <result column="mediaFileOriginalName" property="mediaFileOriginalName" />
             </collection>
         </collection>
     </resultMap>
@@ -24,12 +26,16 @@
             b.id two_id,
             b.pname two_name,
             c.id three_id,
-            c.pname three_name
+            c.pname three_name,
+            media.media_id mediaId,
+            media.media_fileoriginalname mediaFileOriginalName
         FROM
             teachplan a LEFT JOIN teachplan b
             ON a.id = b.parentid
             LEFT JOIN teachplan c
             ON b.id = c.parentid
+            LEFT JOIN teachplan_media media
+            ON c.id = media.teachplan_id
         WHERE a.parentid = '0'
             <if test="_parameter!=null and _parameter!=''">
                 and a.courseid=#{courseId}

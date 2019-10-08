@@ -1,0 +1,23 @@
+server:
+  port: 31450
+spring:
+  application:
+    name: xc-service-manage-media-processor
+  data:
+    mongodb:
+      host: 192.168.136.110
+      port: 27017
+      database: xc_media
+  #rabbitmq配置
+  rabbitmq:
+    host: 192.168.136.110
+    port: 5672
+    username: xcEdu
+    password: 123456
+    virtual-host: /
+xc-service-manage-media:
+  mq:
+    queue-media-video-processor: queue_media_video_processor
+    routingkey-media-video: routingkey_media_video
+  video-location: ${MEDIA_FILE_LOCATION:E:/nginx/xcEdu/video/}
+  ffmpeg-path: F:/ffmpeg-20180227-fa0c9d6-win64-static/bin/ffmpeg.exe

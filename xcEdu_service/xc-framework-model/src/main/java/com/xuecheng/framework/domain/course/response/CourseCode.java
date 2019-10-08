@@ -19,6 +19,8 @@ public enum CourseCode implements ResultCode {
     COURSE_PUBLISH_COURSEIDISNULL(false,31004,"课程Id为空！"),
     COURSE_PUBLISH_VIEWERROR(false,31005,"发布课程视图出错！"),
     COURSE_MEDIS_URLISNULL(false,31101,"选择的媒资文件访问地址为空！"),
+    COURSE_MEDIS_TEACHPLAN_IS_NULL(false,31103,"查询的课程媒资关联数据为空！"),
+    COURSE_MEDIA_TEACHPLAN_GRADE_ERROR(false,31104,"当前正在操作非法课程级别！"),
     COURSE_MEDIS_NAMEISNULL(false,31102,"选择的媒资文件名称为空！");
 
     //操作代码

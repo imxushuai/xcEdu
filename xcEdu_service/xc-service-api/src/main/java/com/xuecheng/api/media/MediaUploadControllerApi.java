@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
-@Api(value="媒资管理接口",description="媒资管理接口，提供文件上传，文件处理等接口")
+@Api(value="媒资文件管理接口",description="媒资管理接口，提供文件上传，文件处理等接口")
 public interface MediaUploadControllerApi {
 
 

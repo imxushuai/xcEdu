@@ -1,6 +1,7 @@
 package com.xuecheng.api.course;
 
 import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.TeachplanMedia;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
@@ -23,5 +24,9 @@ public interface CoursePlanControllerApi {
 
     @ApiOperation("删除课程计划")
     ResponseResult delete(String teachplanId);
+
+    @ApiOperation("保存媒资信息")
+    ResponseResult saveMedia(TeachplanMedia teachplanMedia);
+
 
 }

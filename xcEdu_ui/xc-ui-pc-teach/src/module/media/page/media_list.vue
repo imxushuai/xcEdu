@@ -37,9 +37,9 @@
       </el-table-column>
       <el-table-column prop="processStatus" label="处理状态" width="100" :formatter="formatProcessStatus">
       </el-table-column>
-      <el-table-column prop="uploadTime" label="创建时间" width="110" :formatter="formatCreatetime">
+      <el-table-column prop="uploadTime" label="创建时间" :formatter="formatCreatetime">
       </el-table-column>
-      <el-table-column label="开始处理" width="100" v-if="ischoose != true">
+      <el-table-column label="开始处理" width="100"  align="center" fixed="right" v-if="ischoose != true" >
         <template slot-scope="scope">
           <el-button
             size="small" type="primary" plain @click="process(scope.row.fileId)">开始处理
@@ -65,7 +65,8 @@
 </template>
 <script>
   import * as mediaApi from '../api/media'
-  import utilApi from '@/common/utils';
+  import * as systemApi from '../../../base/api/system'
+  import utilApi from '@/common/utils'
   export default{
     props: ['ischoose'],
     data(){
@@ -85,39 +86,39 @@
     },
     methods:{
       formatCreatetime(row, column){
-        var createTime = new Date(row.uploadTime);
+        var createTime = new Date(row.uploadTime)
         if (createTime) {
-          return utilApi.formatDate(createTime, 'yyyy-MM-dd hh:mm:ss');
+          return utilApi.formatDate(createTime, 'yyyy-MM-dd hh:mm:ss')
         }
       },
       formatProcessStatus(row,column){
-        var processStatus = row.processStatus;
+        var processStatus = row.processStatus
         if (processStatus) {
             if(processStatus == '303001'){
               return "处理中";
             }else if(processStatus == '303002'){
-              return "处理成功";
+              return "处理成功"
             }else if(processStatus == '303003'){
-              return "处理失败";
+              return "处理失败"
             }else if(processStatus == '303004'){
-              return "无需处理";
+              return "无需处理"
             }
         }
       },
       choose(mediaFile){
           if(mediaFile.processStatus !='303002' && mediaFile.processStatus !='303004'){
             this.$message.error('该文件未处理，不允许选择');
-            return ;
+            return 
           }
         if(!mediaFile.fileUrl){
           this.$message.error('该文件的访问url为空，不允许选择');
-          return ;
+          return 
         }
         //调用父组件的choosemedia方法
         this.$emit('choosemedia',mediaFile.fileId,mediaFile.fileOriginalName,mediaFile.fileUrl);
       },
       changePage(page){
-        this.params.page = page;
+        this.params.page = page
         this.query()
       },
       process (id) {
@@ -147,28 +148,22 @@
       //默认查询页面
       this.query()
       //初始化处理状态
+      //查询数据字典字典
       this.processStatusList = [
         {
           id:'',
           name:'全部'
-        },
-        {
-          id:'303001',
-          name:'处理中'
-        },
-        {
-          id:'303002',
-          name:'处理成功'
-        },
-        {
-          id:'303003',
-          name:'处理失败'
-        },
-        {
-          id:'303004',
-          name:'无需处理'
         }
       ]
+      systemApi.sys_getDictionary('303').then((res) => {
+        res.dvalue.forEach((element) => {
+          let data = {}
+          data.id = element.sdId
+          data.name = element.sdName
+          this.processStatusList.push(data)
+        })
+      })
+      
     }
   }
 </script>
