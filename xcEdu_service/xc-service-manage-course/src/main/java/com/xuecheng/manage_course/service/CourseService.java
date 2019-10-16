@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -58,6 +60,9 @@ public class CourseService extends BaseService {
 
     @Autowired
     private TeachplanMediaRepository teachplanMediaRepository;
+
+    @Autowired
+    private TeachplanMediaPubRepository teachplanMediaPubRepository;
 
     /**
      * 查询课程预览所需数据
@@ -128,7 +133,33 @@ public class CourseService extends BaseService {
         // 更新课程索引
         saveCoursePub(id, coursePubRepository.findById(id).orElse(null));
 
+        // 保存课程计划媒资到待索引表
+        saveTeachplanMediaPub(id);
+
         return cmsPostPageResult.getPageUrl();
+    }
+
+    /**
+     * 保存指定课程的课程计划媒资信息到索引表中
+     *
+     * @param id 课程ID
+     */
+    private void saveTeachplanMediaPub(String id) {
+        // 查询课程媒资信息
+        List<TeachplanMedia> teachplanMediaList = teachplanMediaRepository.findByCourseId(id);
+
+        // 删除原有数据
+        teachplanMediaPubRepository.deleteByCourseId(id);
+
+        // 将课程计划媒资信息存储待索引表
+        List<TeachplanMediaPub> teachplanMediaPubList = new ArrayList<>();
+        teachplanMediaList.forEach(teachplanMedia -> {
+            TeachplanMediaPub teachplanMediaPub = new TeachplanMediaPub();
+            BeanUtils.copyProperties(teachplanMedia, teachplanMediaPub);
+            teachplanMediaPubList.add(teachplanMediaPub);
+        });
+
+        teachplanMediaPubRepository.saveAll(teachplanMediaPubList);
     }
 
     /**

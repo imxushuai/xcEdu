@@ -3,6 +3,7 @@ package com.xuecheng.search.service;
 import com.alibaba.fastjson.JSON;
 import com.xuecheng.framework.domain.search.CourseSearchParam;
 import com.xuecheng.framework.domain.search.EsCoursePub;
+import com.xuecheng.framework.domain.search.EsTeachplanMediaPub;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
@@ -68,7 +69,7 @@ public class EsCourseService extends BaseService {
         nativeSearchQueryBuilder.withPageable(PageRequest.of(page, size));
 
         // 结果过滤
-        nativeSearchQueryBuilder.withSourceFilter(new FetchSourceFilter(elasticsearchConfig.getSourceField().split(","), null));
+        nativeSearchQueryBuilder.withSourceFilter(new FetchSourceFilter(elasticsearchConfig.getEsCourseSourceField().split(","), null));
 
         // 查询方式
         QueryBuilder queryBuilder = buildBasicQuery(courseSearchParam);
@@ -159,5 +160,27 @@ public class EsCourseService extends BaseService {
         queryForPage.getContent().forEach(coursePub -> result.put(coursePub.getId(), coursePub));
 
         return result;
+    }
+
+    /**
+     * 查询课程媒资信息
+     *
+     * @param teachplanIds 课程计划ID
+     */
+    public List<EsTeachplanMediaPub> getMedia(String[] teachplanIds) {
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+
+        // 结果过滤
+        nativeSearchQueryBuilder.withSourceFilter(
+                new FetchSourceFilter(elasticsearchConfig.getEsCourseMediaSourceField().split(","), null));
+
+        // 查询条件
+        nativeSearchQueryBuilder.withQuery(QueryBuilders.termQuery("teachplan_id", teachplanIds));
+
+        // 查询
+        List<EsTeachplanMediaPub> esTeachplanMediaPubList
+                = elasticsearchTemplate.queryForList(nativeSearchQueryBuilder.build(), EsTeachplanMediaPub.class);
+
+        return esTeachplanMediaPubList;
     }
 }

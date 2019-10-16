@@ -9,5 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticsearchConfig {
 
-    private String sourceField;
+    private String esCourseSourceField;
+
+    private String esCourseMediaSourceField;
 }

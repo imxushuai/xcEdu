@@ -8,4 +8,5 @@ spring:
       cluster-nodes: 192.168.136.110:9300
       cluster-name: docker-cluster
 elasticsearch:
-  source_field: id,name,grade,mt,st,charge,valid,pic,qq,price,price_old,status,studymodel,teachmode,expires,pub_time,start_time,end_time
+  es_course_source_field: id,name,grade,mt,st,charge,valid,pic,qq,price,price_old,status,studymodel,teachmode,expires,pub_time,start_time,end_time
+  es_course_media_source_field: courseid,media_id,media_url,teachplan_id,media_fileoriginalname
