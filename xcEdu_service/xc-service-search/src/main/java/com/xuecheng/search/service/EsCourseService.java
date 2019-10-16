@@ -31,7 +31,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -140,4 +142,22 @@ public class EsCourseService extends BaseService {
         return queryBuilder;
     }
 
+    /**
+     * 查询课程信息
+     *
+     * @param id 课程id
+     * @return Map<String, EsCoursePub>
+     */
+    public Map<String, EsCoursePub> getAll(String id) {
+        Map<String, EsCoursePub> result = new HashMap<>();
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+
+        // 查询条件
+        nativeSearchQueryBuilder.withQuery(QueryBuilders.termQuery("id", id));
+
+        AggregatedPage<EsCoursePub> queryForPage = elasticsearchTemplate.queryForPage(nativeSearchQueryBuilder.build(), EsCoursePub.class);
+        queryForPage.getContent().forEach(coursePub -> result.put(coursePub.getId(), coursePub));
+
+        return result;
+    }
 }

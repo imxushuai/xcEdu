@@ -21,6 +21,7 @@ export const course_findByIds = ids => {
 export const course_view = id => {
   // return http.requestGet('/openapi/portalview/course/get/'+id);
   return http.requestGet('/openapi/search/course/getall/'+id);
+  // return http.requestGet('http://localhost:40100/search/course/getall/' + id)
 }
 /*获取jwt令牌*/
 export const getjwt= () => {
