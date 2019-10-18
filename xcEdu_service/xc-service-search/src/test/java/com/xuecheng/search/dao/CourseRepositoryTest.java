@@ -1,6 +1,7 @@
 package com.xuecheng.search.dao;
 
 import com.xuecheng.framework.domain.search.EsCoursePub;
+import com.xuecheng.framework.domain.search.EsTeachplanMediaPub;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class CourseRepositoryTest {
     private CourseRepository courseRepository;
 
     @Autowired
+    private EsTeachplanMediaPubRepository esTeachplanMediaPubRepository;
+
+    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
     /**
@@ -28,6 +32,12 @@ public class CourseRepositoryTest {
     public void testFindOne() {
         Optional<EsCoursePub> coursePub = courseRepository.findById("402885816243d2dd016243f24c030002");
         System.out.println(coursePub.get().toString());
+    }
+
+    @Test
+    public void delete() {
+        Optional<EsTeachplanMediaPub> byId = esTeachplanMediaPubRepository.findById("%{id}");
+        esTeachplanMediaPubRepository.delete(byId.get());
     }
 
 }

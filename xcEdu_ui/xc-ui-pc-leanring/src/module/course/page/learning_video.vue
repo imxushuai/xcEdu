@@ -564,15 +564,38 @@
         this.playerOptions.sources[0].src = video_src
         this.playerOptions.autoplay = true
       },
-
+      getFirstTeachplan(){ 
+        for(var i=0;i<this.teachplanList.length;i++) {
+          debugger
+          let firstTeachplan = this.teachplanList[i]; 
+          if(firstTeachplan.children && firstTeachplan.children.length>0){ 
+            let secondTeachplan = firstTeachplan.children[0]
+            return secondTeachplan.id
+            } 
+          } 
+          return ; 
+      },  
       //开始学习
       study(chapter){
-
+        // 获取播放地址
+        courseApi.get_media(this.courseId,chapter).then((res)=>{
+          if(res.success){
+            let fileUrl = sysConfig.videoUrl + res.fileUrl
+              //播放视频
+              this.playvideo(fileUrl)
+            } else if(res.message) {
+              this.$message.error(res.message)
+            } else {
+              this.$message.error("播放视频失败，请刷新页面重试")
+            }
+          }).catch(res => {
+            this.$message.error("播放视频失败，请刷新页面重试")
+          });
       }
 
     },
     created(){
-        //当前请求的url
+      //当前请求的url
       this.url = window.location
       //课程id
       this.courseId = this.$route.params.courseId
@@ -583,7 +606,7 @@
           console.log(view_course)
           if(!view_course || !view_course[this.courseId]){
             this.$message.error("获取课程信息失败，请重新进入此页面！")
-            return ;
+            return
           }
  
           let courseInfo = view_course[this.courseId]
@@ -592,7 +615,14 @@
           if(courseInfo.teachplan){
             let teachplan = JSON.parse(courseInfo.teachplan);
             this.teachplanList = teachplan.children;
- 
+
+            if(!this.chapter || this.chapter == '0'){
+              //取出第一个教学计划 
+              this.chapter = this.getFirstTeachplan() 
+              console.log(this.chapter) 
+            }
+            //开始学习 
+            this.study(this.chapter) 
           }
       })
 

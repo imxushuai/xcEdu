@@ -170,7 +170,7 @@ public class CourseService extends BaseService {
      * @return CoursePub
      */
     public CoursePub saveCoursePub(String id, CoursePub coursePub) {
-        if (StringUtils.isNotEmpty(id)) {
+        if (StringUtils.isBlank(id)) {
             ExceptionCast.cast(CourseCode.COURSE_PUBLISH_COURSEIDISNULL);
         }
         CoursePub coursePubNew = null;

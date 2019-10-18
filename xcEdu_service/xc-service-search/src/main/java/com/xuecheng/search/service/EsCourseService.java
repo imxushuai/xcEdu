@@ -10,6 +10,7 @@ import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.service.BaseService;
 import com.xuecheng.search.config.ElasticsearchConfig;
 import com.xuecheng.search.dao.CourseRepository;
+import com.xuecheng.search.dao.EsTeachplanMediaPubRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
@@ -31,10 +32,7 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -48,6 +46,9 @@ public class EsCourseService extends BaseService {
 
     @Autowired
     private ElasticsearchConfig elasticsearchConfig;
+
+    @Autowired
+    private EsTeachplanMediaPubRepository esTeachplanMediaPubRepository;
 
     /**
      * 查询课程索引
@@ -175,12 +176,8 @@ public class EsCourseService extends BaseService {
                 new FetchSourceFilter(elasticsearchConfig.getEsCourseMediaSourceField().split(","), null));
 
         // 查询条件
-        nativeSearchQueryBuilder.withQuery(QueryBuilders.termQuery("teachplan_id", teachplanIds));
+        nativeSearchQueryBuilder.withQuery(QueryBuilders.termQuery("teachplan_id", Arrays.stream(teachplanIds).reduce((a, b) -> a + "," +b).get()));
 
-        // 查询
-        List<EsTeachplanMediaPub> esTeachplanMediaPubList
-                = elasticsearchTemplate.queryForList(nativeSearchQueryBuilder.build(), EsTeachplanMediaPub.class);
-
-        return esTeachplanMediaPubList;
+        return elasticsearchTemplate.queryForList(nativeSearchQueryBuilder.build(), EsTeachplanMediaPub.class);
     }
 }

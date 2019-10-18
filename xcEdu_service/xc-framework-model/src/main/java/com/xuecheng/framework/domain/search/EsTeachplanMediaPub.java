@@ -1,5 +1,6 @@
 package com.xuecheng.framework.domain.search;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class EsTeachplanMediaPub {
     @Field
     private String media_url;
     @Field
-    private String teachplan_id;
+    @JsonProperty("teachplan_id")
+    private String teachplanId;
 
 }
