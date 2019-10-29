@@ -13,6 +13,7 @@
         <module>../xc-service-manage-media</module>
         <module>../xc-service-manage-media-processor</module>
         <module>../xc-service-learning</module>
+        <module>../xc-service-ucenter-auth</module>
         <module>../xc-framework-common</module>
         <module>../xc-framework-model</module>
         <module>../xc-framework-utils</module>
