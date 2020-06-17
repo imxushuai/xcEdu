@@ -8,7 +8,7 @@
 
 当前市场的在线教育模式多种多样，包括：B2C、C2C、B2B2C等业务模式，学成在线采用B2B2C业务模式，即向企业或个人提供在线教育平台提供教学服务，老师和学生通过平台完成整个教学和学习的过程，市场上类似的平台有：网易云课堂、腾讯课堂等，学成在线的特点是IT职业课程在线教学。
 
-![](https://raw.githubusercontent.com/imxushuai/ForPicGo/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E5%9B%BE.jpg)
+![](https://imxushuai-01.coding.net/p/pic/d/pic/git/raw/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E5%9B%BE.jpg)
 
 大模块介绍：
 
@@ -24,7 +24,7 @@
 
 学成在线采用当前流行的前后端分离架构开发，由用户层、UI层、微服务层、数据层等部分组成，为PC、App、H5等客户端用户提供服务。下图是系统的技术架构图：
 
-![](https://raw.githubusercontent.com/imxushuai/ForPicGo/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)
+![](https://imxushuai-01.coding.net/p/pic/d/pic/git/raw/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)
 
 各模块说明：
 
@@ -41,7 +41,7 @@
 
 ## 技术栈
 
-![](https://raw.githubusercontent.com/imxushuai/ForPicGo/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
+![](https://imxushuai-01.coding.net/p/pic/d/pic/git/raw/master/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
 
 重点了解微服务技术栈
 
