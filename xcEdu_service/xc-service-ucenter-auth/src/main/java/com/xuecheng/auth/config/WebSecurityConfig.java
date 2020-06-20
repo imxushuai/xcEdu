@@ -19,14 +19,12 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/userlogin", "/userlogout", "/userjwt");
-
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager manager = super.authenticationManagerBean();
-        return manager;
+        return super.authenticationManagerBean();
     }
 
     //采用bcrypt对密码进行编码

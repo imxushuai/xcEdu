@@ -1,5 +1,6 @@
 package com.xuecheng.auth.service;
 
+import com.xuecheng.auth.client.UserClient;
 import com.xuecheng.framework.domain.ucenter.XcMenu;
 import com.xuecheng.framework.domain.ucenter.ext.XcUserExt;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +24,10 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    ClientDetailsService clientDetailsService;
+    private ClientDetailsService clientDetailsService;
+
+    @Autowired
+    private UserClient userClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,25 +45,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             return null;
         }
-        XcUserExt userext = new XcUserExt();
-        userext.setUsername("itcast");
-        userext.setPassword(new BCryptPasswordEncoder().encode("123"));
-        userext.setPermissions(new ArrayList<>());
+
+        // 查询用户信息
+        XcUserExt userext = userClient.findByUsername(username);
         if (userext == null) {
             return null;
         }
-        //取出正确密码（hash值）
+        //从数据库查询用户正确的密码，Spring Security会去比对输入密码的正确性
         String password = userext.getPassword();
-        //这里暂时使用静态密码
-//       String password ="123";
-        //用户权限，这里暂时使用静态数据，最终会从数据库读取
-        //从数据库获取权限
-        List<XcMenu> permissions = userext.getPermissions();
-        List<String> user_permission = new ArrayList<>();
-        permissions.forEach(item -> user_permission.add(item.getCode()));
-//        user_permission.add("course_get_baseinfo");
-//        user_permission.add("course_find_pic");
-        String user_permission_string = StringUtils.join(user_permission.toArray(), ",");
+        String user_permission_string = "";
         UserJwt userDetails = new UserJwt(username,
                 password,
                 AuthorityUtils.commaSeparatedStringToAuthorityList(user_permission_string));

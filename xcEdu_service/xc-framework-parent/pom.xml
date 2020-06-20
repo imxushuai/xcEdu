@@ -18,6 +18,7 @@
         <module>../xc-framework-model</module>
         <module>../xc-framework-utils</module>
         <module>../xc-govern-center</module>
+        <module>../xc-service-ucenter</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
