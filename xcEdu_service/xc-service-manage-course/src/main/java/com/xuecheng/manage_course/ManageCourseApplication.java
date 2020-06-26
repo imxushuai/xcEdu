@@ -2,6 +2,7 @@ package com.xuecheng.manage_course;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xuecheng.framework.intercepter.FeignClientInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,6 +37,11 @@ public class ManageCourseApplication {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return objectMapper;
+    }
+
+    @Bean
+    public FeignClientInterceptor feignClientInterceptor(){
+        return new FeignClientInterceptor();
     }
 
 }

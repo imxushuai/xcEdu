@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
+import java.nio.file.AccessDeniedException;
+
 /**
  * 统一异常处理类
  */
@@ -29,6 +31,7 @@ public class ExceptionCatch {
         OPTIONS = builder
                 .put(HttpMessageNotReadableException.class, CommonCode.PARAMS_ERROR)
                 .put(MissingServletRequestPartException.class, CommonCode.PARAMS_ERROR)
+                .put(AccessDeniedException.class, CommonCode.UNAUTHORISE)
                 .build();
 
     }

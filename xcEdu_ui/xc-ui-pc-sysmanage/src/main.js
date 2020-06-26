@@ -34,7 +34,7 @@ Vue.use(vueResource);
 const router = new VueRouter({
   routes:routes
 })
-/*
+
 router.beforeEach((to, from, next) => {
   if(openAuthenticate){
 
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 
-});*/
+});
 //授权
 // router.afterEach((to, from, next) => {
 //   if(openAuthorize){
@@ -102,7 +102,7 @@ router.beforeEach((to, from, next) => {
 import axios from 'axios'
 import { Message } from 'element-ui';
 
-/*// 添加请求拦截器
+// 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求向header添加jwt
   let jwt = utilApi.getJwt()
@@ -132,7 +132,7 @@ axios.interceptors.response.use(data => {
     }
   }
   return data
-})*/
+})
 
 new Vue({
   el: '#app',

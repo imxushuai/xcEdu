@@ -12,13 +12,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -48,15 +48,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 查询用户信息
         XcUserExt userext = userClient.findByUsername(username);
+        if (userext.getPermissions() == null) {
+            userext.setPermissions(new ArrayList<>());
+        }
         if (userext == null) {
             return null;
         }
         //从数据库查询用户正确的密码，Spring Security会去比对输入密码的正确性
         String password = userext.getPassword();
-        String user_permission_string = "";
+        List<String> stringList = userext.getPermissions()
+                .stream()
+                .map(XcMenu::getCode)
+                .collect(Collectors.toList());
+        String[] permissionList = new String[stringList.size()];
         UserJwt userDetails = new UserJwt(username,
                 password,
-                AuthorityUtils.commaSeparatedStringToAuthorityList(user_permission_string));
+                AuthorityUtils.createAuthorityList(stringList.toArray(permissionList)));
         userDetails.setId(userext.getId());
         userDetails.setUtype(userext.getUtype());//用户类型
         userDetails.setCompanyId(userext.getCompanyId());//所属企业

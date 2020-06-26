@@ -29,5 +29,7 @@ public interface CourseBaseControllerApi {
     @ApiOperation("查询指定课程ID的基本信息")
     CourseBaseResult findById(String courseId);
 
+    QueryResponseResult findCourseList(int page, int size, CourseListRequest courseListRequest);
+
 
 }

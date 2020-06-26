@@ -1,6 +1,8 @@
 package com.xuecheng.manage_course.service;
 
+import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.course.response.CourseCode;
 import com.xuecheng.framework.model.response.CommonCode;
@@ -8,6 +10,7 @@ import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.service.BaseService;
 import com.xuecheng.manage_course.dao.CourseBaseRepository;
+import com.xuecheng.manage_course.dao.CourseMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class CourseBaseService extends BaseService {
 
     @Autowired
     private CourseBaseRepository courseBaseRepository;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
     /**
      * 新增课程基本信息
@@ -93,5 +101,32 @@ public class CourseBaseService extends BaseService {
         queryResult.setList(pageResult.getContent());
 
         return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+    }
+
+    /**
+     * 查询当前登录用户的课程列表
+     *
+     * @param companyId         当前用户的所属公司
+     * @param page              当前页
+     * @param size              每页记录数
+     * @param courseListRequest 查询条件
+     * @return 课程列表
+     */
+    public QueryResponseResult findCourseList(String companyId, int page, int size, CourseListRequest courseListRequest) {
+        if(courseListRequest == null){
+            courseListRequest = new CourseListRequest();
+        }
+        // 设置companyid
+        courseListRequest.setCompanyId(companyId);
+        // 分页
+        PageHelper.startPage(page, size);
+        // 调用dao
+        com.github.pagehelper.Page<CourseInfo> courseListPage = courseMapper.findCourseListPage(courseListRequest);
+        List<CourseInfo> list = courseListPage.getResult();
+        long total = courseListPage.getTotal();
+        QueryResult<CourseInfo> courseInfoQueryResult = new QueryResult<>();
+        courseInfoQueryResult.setList(list);
+        courseInfoQueryResult.setTotal(total);
+        return new QueryResponseResult(CommonCode.SUCCESS,courseInfoQueryResult);
     }
 }

@@ -8,6 +8,7 @@ import com.xuecheng.framework.domain.course.response.CourseBaseResult;
 import com.xuecheng.framework.domain.course.response.CourseCode;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.utils.XcOauth2Util;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.manage_course.service.CourseBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class CourseBaseController extends BaseController implements CourseBaseCo
 
 
     @Override
-    @GetMapping("list/{page}/{size}")
+//    @GetMapping("list/{page}/{size}")
     public QueryResponseResult findList(@PathVariable int page,
                                         @PathVariable int size,
                                         CourseListRequest queryPageRequest) {
@@ -68,5 +69,16 @@ public class CourseBaseController extends BaseController implements CourseBaseCo
         CourseBase courseBase = courseBaseService.findById(courseId);
         isNullOrEmpty(courseBase, CourseCode.COURSE_NOT_EXIST);
         return CourseBaseResult.SUCCESS(courseBase);
+    }
+
+    @Override
+    @GetMapping("/list/{page}/{size}")
+    public QueryResponseResult findCourseList(@PathVariable int page, @PathVariable int size,
+                                              CourseListRequest courseListRequest) {
+        // 获取当前用户信息
+        XcOauth2Util xcOauth2Util = new XcOauth2Util();
+        XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
+        // 使用companyId查询数据
+        return courseBaseService.findCourseList(userJwt.getCompanyId(), page, size, courseListRequest);
     }
 }

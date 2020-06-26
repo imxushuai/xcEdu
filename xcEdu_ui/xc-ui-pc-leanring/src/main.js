@@ -60,7 +60,7 @@ import * as systemApi from './base/api/system';
 let sysConfig = require('@/../config/sysConfig')
 let openAuthenticate = sysConfig.openAuthenticate
 let openAuthorize = sysConfig.openAuthorize
-/*
+
 router.beforeEach((to, from, next) => {
   if(openAuthenticate){
 
@@ -106,7 +106,7 @@ router.beforeEach((to, from, next) => {
   }
 
 });
-*/
+
 //授权
 // router.afterEach((to, from, next) => {
 //   if(openAuthorize){
@@ -127,7 +127,7 @@ router.beforeEach((to, from, next) => {
 //   }
 //
 // });
-/*
+
 import axios from 'axios'
 import { Message } from 'element-ui';
 
@@ -161,7 +161,7 @@ axios.interceptors.response.use(data => {
     }
   }
   return data
-})*/
+})
 /*
  //axios请求超时设置
  axios.defaults.retry = 2;

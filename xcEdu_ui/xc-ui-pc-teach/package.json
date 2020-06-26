@@ -71,7 +71,7 @@
     "mockjs": "^1.0.1-beta3",
     "nightwatch": "^0.9.21",
     "node-notifier": "^5.4.3",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^3.2.1",
     "ora": "^1.4.0",
     "portfinder": "^1.0.24",
