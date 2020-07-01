@@ -20,6 +20,7 @@
         <module>../xc-govern-center</module>
         <module>../xc-service-ucenter</module>
         <module>../xc-govern-gateway</module>
+        <module>../xc-service-manage-order</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
